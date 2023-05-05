@@ -8,17 +8,24 @@ export default function Player() {
 
   useEffect(() => {
     // async function getPlayerStats() {
-    //   const response = await axios.get('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=687C5AB798DD80B0CC85FAF456592B73&steamid=76561198283174949');
+    //   const response = await axios.get('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=051D7963C242CBAF369C2AD7F37D779F&steamid=76561198283174949');
     //   setPlayer(response);
     // }
+    // async function getPlayerStats() {
+    //   const response = await axios.get('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=051D7963C242CBAF369C2AD7F37D779F&steamid=76561198283174949');
+    //   setPlayer(response.data.playerstats);
+    // }
     async function getPlayerStats() {
-      const response = await axios.get('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=687C5AB798DD80B0CC85FAF456592B73&steamid=76561198283174949');
-      setPlayer(response.data.playerstats);
+      const response = await fetch('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=051D7963C242CBAF369C2AD7F37D779F&steamid=76561198283174949', { method: 'GET', headers: { 'Access-Control-Allow-Origin': '*', 'content-type': 'aplication/json' } })
+        .then(res => res.json())
+        setPlayer(response.data.playerstats);
+
+      // const response = await axios.get('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=051D7963C242CBAF369C2AD7F37D779F&steamid=76561198283174949');
+      // setPlayer(response.data.playerstats);
     }
 
     getPlayerStats();
   }, []);
-  console.log(player)
 
   return (
     <div className={styles.container}>
