@@ -33,8 +33,11 @@ export default function Player() {
               {player.platformInfo.platformUserHandle}
             </div>
             <div className={styles.cardInfoValue}>
-              <Image alt='' src={player.platformInfo.avatarUrl} width={50} height={50} />
-
+              <img
+                className="inline-block h-30 w-30 rounded-full ring-2 ring-white"
+                src={player.platformInfo.avatarUrl}
+                alt=""
+              />
             </div>
           </div>
           <div className={styles.cardInfoItem}>
