@@ -1,57 +1,71 @@
 "use client"
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import andreyStats from '@/utils/76561198283174949.json';
+
 import styles from '@/styles/player.module.css';
+import Image from 'next/image';
 
 export default function Player() {
   const [player, setPlayer] = useState<any>(null);
+  const [loading, setLoading] = useState<any>(true);
 
   useEffect(() => {
-    // async function getPlayerStats() {
-    //   const response = await axios.get('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=051D7963C242CBAF369C2AD7F37D779F&steamid=76561198283174949');
-    //   setPlayer(response);
-    // }
-    // async function getPlayerStats() {
-    //   const response = await axios.get('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=051D7963C242CBAF369C2AD7F37D779F&steamid=76561198283174949');
-    //   setPlayer(response.data.playerstats);
-    // }
+    setLoading(true)
     async function getPlayerStats() {
-      const response = await fetch('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=051D7963C242CBAF369C2AD7F37D779F&steamid=76561198283174949', { method: 'GET', headers: { 'Access-Control-Allow-Origin': '*', 'content-type': 'aplication/json' } })
-        .then(res => res.json())
-        setPlayer(response.data.playerstats);
-
-      // const response = await axios.get('https://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v2/?appid=730&key=051D7963C242CBAF369C2AD7F37D779F&steamid=76561198283174949');
-      // setPlayer(response.data.playerstats);
+      const { data } = await andreyStats;
+      setPlayer(data);
     }
-
     getPlayerStats();
+    setLoading(false)
   }, []);
 
+  if (loading) {
+    return false;
+  }
+  console.log(player)
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         <h1 className={styles.cardTitle}>Stats do jogador</h1>
         <div className={styles.cardInfo}>
           <div className={styles.cardInfoItem}>
-            <div className={styles.cardInfoLabel}>Kills</div>
-            {/* <div className={styles.cardInfoValue}>{player?.stats.find(stat => stat.name === 'total_kills').value}</div> */}
-            <div className={styles.cardInfoValue}>100</div>
+            <div className={styles.cardInfoLabel}>
+              {player.platformInfo.platformUserHandle}
+            </div>
+            <div className={styles.cardInfoValue}>
+              <Image alt='' src={player.platformInfo.avatarUrl} width={50} height={50} />
+
+            </div>
+          </div>
+          <div className={styles.cardInfoItem}>
+            <div className={styles.cardInfoLabel}>K/D</div>
+            <div className={styles.cardInfoValue}>
+              {player.segments[0].stats.kd.displayValue}
+            </div>
+          </div>
+          <div className={styles.cardInfoItem}>
+            <div className={styles.cardInfoLabel}>kills</div>
+            <div className={styles.cardInfoValue}>
+              {player.segments[0].stats.kills.displayValue}
+            </div>
           </div>
           <div className={styles.cardInfoItem}>
             <div className={styles.cardInfoLabel}>Deaths</div>
-            <div className={styles.cardInfoValue}>50</div>
-          </div>
-          <div className={styles.cardInfoItem}>
-            <div className={styles.cardInfoLabel}>Assists</div>
-            <div className={styles.cardInfoValue}>20</div>
+            <div className={styles.cardInfoValue}>
+              {player.segments[0].stats.deaths.displayValue}
+            </div>
           </div>
           <div className={styles.cardInfoItem}>
             <div className={styles.cardInfoLabel}>Headshots</div>
-            <div className={styles.cardInfoValue}>60</div>
+            <div className={styles.cardInfoValue}>
+              {player.segments[0].stats.headshots.displayValue} || {player.segments[0].stats.headshotPct.displayValue}
+            </div>
           </div>
           <div className={styles.cardInfoItem}>
             <div className={styles.cardInfoLabel}>Tempo jogado</div>
-            <div className={styles.cardInfoValue}>10 horas</div>
+            <div className={styles.cardInfoValue}>
+              {player.segments[0].stats.timePlayed.displayValue}
+            </div>
           </div>
         </div>
       </div>
